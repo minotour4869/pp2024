@@ -145,8 +145,6 @@ def getStudentCourseMark(students, courses):
         print(f"\u001b[0;31mError: \u001b[0m{e}")
 
 
-
-
 def main():
     __num_student = 0
     __num_course = 0
