@@ -1,4 +1,4 @@
-def getNumberOfStudents():
+def get_number_of_students():
     while True:
         try:
             num_student = int(
@@ -14,24 +14,24 @@ def getNumberOfStudents():
             print()
 
 
-def getStudentInformation(student_id):
+def get_student_information(student_id):
     print(f"\nInfo for student number {student_id}:")
 
-    def getStudentId():
+    def get_student_id():
         while True:
             student_id = input("Student ID: ")
             if len(student_id):
                 return student_id
             print("Student ID cannot be empty, please try again\n")
 
-    def getStudentName():
+    def get_student_name():
         while True:
             name = input("Student name: ")
             if len(name):
                 return name
             print("Name cannot be empty, please try again\n")
 
-    def getDoB():
+    def get_dob():
         while True:
             dob = input("Date of birth (DD/MM/YYYY): ")
             # since it wasn't allowed (yet) to check format using re module, will only check whether the string is empty
@@ -40,13 +40,13 @@ def getStudentInformation(student_id):
             print("Invalid date of birth, please try again")
 
     return {
-        "id": getStudentId(),
-        "name": getStudentName(),
-        "dob": getDoB()
+        "id": get_student_id(),
+        "name": get_student_name(),
+        "dob": get_dob()
     }
 
 
-def getNumberOfCourses():
+def get_number_of_courses():
     while True:
         try:
             num_course = int(input("Amount of courses: "))
@@ -61,17 +61,17 @@ def getNumberOfCourses():
             print()
 
 
-def getCourseInformation(course_id):
+def get_course_information(course_id):
     print(f"Course number {course_id}: ")
 
-    def getCourseId():
+    def get_course_id():
         while True:
             course_id = input("Course ID: ")
             if len(course_id):
                 return course_id
             print("Course ID cannot be empty, please try again\n")
 
-    def getCourseName():
+    def get_course_name():
         while True:
             name = input("Course name: ")
             if len(name):
@@ -79,13 +79,13 @@ def getCourseInformation(course_id):
             print("Course name cannot be empty, please try again\n")
 
     return {
-        "id": getCourseId(),
-        "name": getCourseName(),
+        "id": get_course_id(),
+        "name": get_course_name(),
         "marks": {}
     }
 
 
-def setStudentCourseMark(students, courses):
+def set_student_course_mark(students, courses):
     try:
         student_id = input("Student ID: ")
         if not len(student_id):
@@ -111,19 +111,19 @@ def setStudentCourseMark(students, courses):
         print(f"\u001b[0;31mError: \u001b[0m{e}")
 
 
-def listCourses(courses):
+def list_courses(courses):
     print("Courses list: ")
     for i, course in enumerate(courses):
         print(f"{i + 1}. {course['name']} ({course['id']})")
 
 
-def listStudents(students):
+def list_students(students):
     print("Student list: (format: <Name>,<ID>,<DoB>)")
     for i, student in enumerate(students):
         print(f"{i + 1}. {student['name']},{student['id']},{student['dob']}")
 
 
-def getStudentCourseMark(students, courses):
+def get_student_course_mark(students, courses):
     try:
         student_id = input("Student ID: ")
         if not len(student_id):
@@ -168,23 +168,23 @@ def main():
                 print("1. Number of students\n2. Students information\n3. Number of courses\n4. Courses information\n5. Score of a student in a course\n0. Back")
                 ctx = int(input("> "))
                 if ctx == 1:
-                    __num_student = getNumberOfStudents()
+                    __num_student = get_number_of_students()
                 elif ctx == 2:
                     if not __num_student:
                         raise ValueError("num_student undefined")
-                    __students = [getStudentInformation(i) for i in range(__num_student)]
+                    __students = [get_student_information(i) for i in range(__num_student)]
                 elif ctx == 3:
-                    __num_course = getNumberOfCourses()
+                    __num_course = get_number_of_courses()
                 elif ctx == 4:
                     if not __num_course:
                         raise ValueError("num_course undefinded")
-                    __courses = [getCourseInformation(i) for i in range(__num_course)]
+                    __courses = [get_course_information(i) for i in range(__num_course)]
                 elif ctx == 5:
                     if not __num_student:
                         raise ValueError("num_student undefined")
                     if not __num_course:
                         raise ValueError("num_course undefined")
-                    setStudentCourseMark(__students, __courses)
+                    set_student_course_mark(__students, __courses)
                 elif ctx == 0:
                     continue
                 else:
@@ -196,17 +196,17 @@ def main():
                 if ctx == 1:
                     if not __num_course:
                         raise ValueError("num_course undefined")
-                    listCourses(__courses)
+                    list_courses(__courses)
                 elif ctx == 2:
                     if not __num_student:
                         raise ValueError("num_student undefined")
-                    listStudents(__students)
+                    list_students(__students)
                 elif ctx == 3:
                     if not __num_student:
                         raise ValueError("num_student undefined")
                     if not __num_course:
                         raise ValueError("num_course undefined")
-                    getStudentCourseMark(__students, __courses)
+                    get_student_course_mark(__students, __courses)
                 elif ctx == 0:
                     continue
                 else:
