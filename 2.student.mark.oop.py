@@ -77,12 +77,10 @@ class Course():
     # Mark
     def get_mark(self, student: Student):
         return (self.__marks[student]
-                if student.get_name() in self.__marks.keys()
+                if student in self.__marks.keys()
                 else None)
 
     def set_mark(self, student: Student, mark: float):
-        if student is None:
-            raise ValueError("Student not found")
         if mark < 0 or mark > 20:
             raise ValueError("Student mark can be only between 0 and 20")
         self.__marks.update({student: mark})
@@ -105,7 +103,7 @@ class School(Student, Course):
 
     def set_num_students(self, num_students):
         if num_students <= 0:
-            raise ValueError("Invalid number of students")
+            raise ValueError(f"Invalid number of students ({num_students})")
         self.__num_students = num_students
 
     # Num courses
@@ -116,7 +114,7 @@ class School(Student, Course):
 
     def set_num_courses(self, num_courses):
         if num_courses <= 0:
-            raise ValueError("Invalid number of students")
+            raise ValueError(f"Invalid number of courses ({num_courses})")
         self.__num_courses = num_courses
 
     def get_students(self):
@@ -150,14 +148,16 @@ class School(Student, Course):
 
     def input_students(self):
         if self.__num_students <= 0:
-            raise ValueError("Invalid number of students")
+            raise ValueError("Students amount can't be 0")
+        self.__students.clear()
         for i in range(self.__num_students):
             print(f"\nInfo of student {i + 1}: ")
             self.input_student()
 
     def input_courses(self):
         if self.__num_courses <= 0:
-            raise ValueError("Invalid number of courses")
+            raise ValueError("Courses amount can't be 0")
+        self.__courses.clear()
         for i in range(self.__num_courses):
             print(f"\nInfo of course {i + 1}: ")
             self.input_course()
@@ -181,17 +181,23 @@ class School(Student, Course):
         for i, course in enumerate(self.__courses):
             print(f"{i + 1}. {course.get_id()} - {course.get_name()}")
 
-    def get_course(self, course_name):
-        for c in self.get_courses():
-            if c.get_name() == course_name:
-                pass
-        else:
-            return None
+    def get_student(self, student_id):
+        for student in self.get_students():
+            if student.get_id() == student_id:
+                return student
+        return None
+
+    def get_course(self, course_id):
+        for course in self.get_courses():
+            if course.get_id() == course_id:
+                return course
+        return None
+
 
 
 def main():
     school = School()
-    __running = False
+    __running = True
 
     # Prompt function and return selection from user
     def prompt_command(prompts):
@@ -223,18 +229,46 @@ def main():
         elif ctx_mode == 4:
             school.input_courses()
         elif ctx_mode == 5:
-            pass
-        elif ctx_mode == 0:
-            return
+            course = school.get_course(input("Course id: "))
+            if course is None:
+                raise ValueError("No course found")
+            student = school.get_student(input("Student id: "))
+            if student is None:
+                raise ValueError("No student found")
+            course.set_mark(student,
+                            float(input("Mark of the student: ")))
         else:
             raise ValueError("Invalid selection")
 
     # List mode
     def _list_mode():
-        pass
+        ctx_mode = prompt_command([
+            "\nContext to list: ",
+            "1. List of students",
+            "2. List of courses",
+            "3. Mark of a student in a course"
+            ])
+        if ctx_mode == 1:
+            school.list_students()
+        elif ctx_mode == 2:
+            school.list_courses()
+        elif ctx_mode == 3:
+            course = school.get_course(input("Course id: "))
+            if course is None:
+                raise ValueError("No course found")
+            student = school.get_student(input("Student id: "))
+            if student is None:
+                raise ValueError("No student found")
+            mark = course.get_mark(student)
+            if mark is None:
+                raise ValueError("Student have no mark in this course")
+            print(
+                f"\nName: {student.get_name()}\n"
+                f"Course: {course.get_name()}\n"
+                f"Mark: {mark}"
+            )
 
     def _main_mode():
-        global __running
         main_prompt = prompt_command([
             "\nMode: ",
             "1. Insert",
@@ -248,7 +282,7 @@ def main():
             _list_mode()
         elif main_prompt == 0:
             print("Exiting...")
-            __running = False
+            exit(0)
         else:
             raise ValueError("Invalid selection")
 
