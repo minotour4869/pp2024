@@ -194,7 +194,6 @@ class School(Student, Course):
         return None
 
 
-
 def main():
     school = School()
     __running = True
